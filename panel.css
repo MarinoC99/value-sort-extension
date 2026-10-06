@@ -268,9 +268,10 @@
   border: 1px solid var(--avs-line);
   border-radius: 50%;
   color: var(--avs-muted);
-  font-size: 10px;
-  font-style: italic;
-  font-weight: 600;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 700;
   line-height: 1;
   cursor: help;
 }

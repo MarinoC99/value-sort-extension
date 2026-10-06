@@ -183,10 +183,12 @@ signed in), scroll to the bottom of the page and back, and save it with
 ## Locales
 
 The extension runs on amazon.com, .co.uk, .ca, .com.au, .in and .sg. Only
-amazon.com is covered by fixtures. The others are included because they share
-the same English labels and all write the currency before the number (`$`,
-`£`, `₹`, `S$`), which is the format the parser reads. That makes them
-plausible, not tested.
+amazon.com is covered by fixtures. amazon.co.uk and amazon.ca were checked live
+by hand and worked; amazon.co.uk needs a UK delivery address, because from
+elsewhere Amazon hides the price of most results (the panel says so). The
+others are included because they share the same English labels and all write
+the currency before the number (`$`, `£`, `₹`, `S$`), which is the format the
+parser reads. That makes them plausible, not tested.
 
 ### Re-adding non-English locales
 
