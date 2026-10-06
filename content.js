@@ -688,6 +688,15 @@
       save();
     });
 
+    // Enter commits a number and leaves the field, the same as clicking elsewhere.
+    for (const id of ["avs-minrev", "avs-strength"]) {
+      $(id).addEventListener("keydown", (e) => {
+        if (e.key !== "Enter") return;
+        e.preventDefault();
+        e.target.blur();
+      });
+    }
+
     $("avs-collapse").addEventListener("click", () => {
       settings.collapsed = true;
       save();
