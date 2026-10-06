@@ -1,0 +1,6 @@
+# Saved Amazon pages: Amazon's content, kept local only. See README "Tests".
+fixtures/
+
+node_modules/
+dist/
+.DS_Store

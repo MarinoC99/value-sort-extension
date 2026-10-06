@@ -1,0 +1,15 @@
+{
+  "name": "amazon-value-sort",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Chrome extension that re-sorts Amazon results by a tunable blend of review quality and price.",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "fixtures": "node tests/harness.js",
+    "package": "node tools/package.js"
+  },
+  "devDependencies": {
+    "jsdom": "^24.1.0"
+  }
+}
