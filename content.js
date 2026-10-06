@@ -585,12 +585,12 @@
       <input class="avs-slider" id="avs-weight" type="range" min="0" max="100" step="1"
              aria-label="Weighting: left for quality, right for price" />
       <div class="avs-row">
-        <label for="avs-enabled">Re-sort results</label>
-        <input type="checkbox" id="avs-enabled" />
-      </div>
-      <div class="avs-row">
         <label for="avs-minrev">Min. review count</label>
         <input type="number" id="avs-minrev" min="0" step="10" aria-label="Minimum reviews" />
+      </div>
+      <div class="avs-row">
+        <label for="avs-enabled">Re-sort results</label>
+        <input type="checkbox" id="avs-enabled" />
       </div>
       <div class="avs-row">
         <label for="avs-sponsored">Hide sponsored</label>
