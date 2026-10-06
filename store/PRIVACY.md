@@ -5,8 +5,8 @@
 Everything stays in the user's browser, in `chrome.storage.local`:
 
 - **Settings** (key `avs`): the quality/price weighting, whether sorting is on, the
-  minimum review count, whether sponsored results are dimmed, and whether the panel is
-  collapsed.
+  minimum review count, whether sponsored results are dimmed, the "Trust after" review
+  count, and whether the panel and its Advanced section are open.
 - **Basis memory** (key `avsBasis`): for each of the last 200 searches, the site and
   search term (for example `www.amazon.com|hand soap`), the price basis used (mass,
   volume, count, length or area), and when it was last used. Older entries are dropped.

@@ -226,6 +226,86 @@
   cursor: pointer;
 }
 
+/* ---- advanced (collapsed by default) ---- */
+
+.avs-advanced {
+  border-top: 1px solid var(--avs-line);
+}
+
+.avs-advanced summary {
+  padding: 7px 0;
+  color: var(--avs-muted);
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.avs-advanced summary:hover {
+  color: var(--avs-text);
+}
+
+.avs-advanced summary:focus-visible {
+  outline: 2px solid var(--avs-quality);
+  outline-offset: 2px;
+}
+
+.avs-advanced .avs-row {
+  position: relative;
+}
+
+.avs-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* the "i" that opens the explanation; the tip spans the panel above the row */
+.avs-info {
+  display: inline-grid;
+  place-items: center;
+  width: 15px;
+  height: 15px;
+  border: 1px solid var(--avs-line);
+  border-radius: 50%;
+  color: var(--avs-muted);
+  font-size: 10px;
+  font-style: italic;
+  font-weight: 600;
+  line-height: 1;
+  cursor: help;
+}
+
+.avs-info:hover,
+.avs-info:focus-visible {
+  border-color: var(--avs-muted);
+  color: var(--avs-text);
+  outline: none;
+}
+
+.avs-tip {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 6px);
+  padding: 10px 12px;
+  border: 1px solid var(--avs-line);
+  border-radius: 8px;
+  background: var(--avs-raised);
+  color: var(--avs-text);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5;
+  box-shadow: 0 12px 28px -12px rgba(5, 12, 20, 0.8);
+  cursor: auto;
+}
+
+.avs-info:hover .avs-tip,
+.avs-info:focus .avs-tip {
+  display: block;
+}
+
 .avs-status {
   margin-top: 10px;
   color: var(--avs-muted);

@@ -21,11 +21,12 @@
   const DEFAULTS = {
     weight: 0.5, // 0 = price only, 1 = quality only
     priorMean: 4.3, // what an unknown product is assumed to be worth
-    priorStrength: 30, // reviews needed to outvote that assumption; fixed, not user-set
+    priorStrength: 30, // reviews needed to outvote that assumption ("Trust after")
     minReviews: 0,
     hideSponsored: true,
     enabled: true,
     collapsed: false,
+    advancedOpen: false,
   };
 
   // Share of priced results that must agree on a unit before we rank by it.
@@ -568,6 +569,24 @@
         <label for="avs-sponsored">Hide sponsored</label>
         <input type="checkbox" id="avs-sponsored" />
       </div>
+      <details class="avs-advanced" id="avs-advanced">
+        <summary>Advanced</summary>
+        <div class="avs-row">
+          <span class="avs-label">
+            <label for="avs-strength">Trust after</label>
+            <span class="avs-info" tabindex="0" aria-label="About Trust after">i<span class="avs-tip" id="avs-strength-help" role="tooltip">
+              How much benefit of the doubt a star rating gets. A product with only a few
+              reviews can have a high average by luck, so every product is treated as if it
+              also had this many extra reviews at 4.3 stars, a typical Amazon rating. At 30,
+              a 4.9 from 6 reviews counts as about 4.4, while a 4.6 from 10,000 reviews stays
+              4.6. Raise it to be more sceptical of products with few reviews; lower it toward
+              1 to take star ratings at face value. Unlike Min. review count, nothing is
+              hidden: products are only re-weighted.
+            </span></span>
+          </span>
+          <input type="number" id="avs-strength" min="1" max="500" step="5" aria-describedby="avs-strength-help" />
+        </div>
+      </details>
       <div class="avs-status" id="avs-status"></div>
     `;
 
@@ -592,6 +611,8 @@
       $("avs-enabled").checked = settings.enabled;
       $("avs-sponsored").checked = settings.hideSponsored;
       $("avs-minrev").value = String(settings.minReviews);
+      $("avs-strength").value = String(settings.priorStrength);
+      $("avs-advanced").open = !!settings.advancedOpen;
       paint();
     }
 
@@ -625,6 +646,17 @@
       e.target.value = String(settings.minReviews);
       save();
       apply();
+    });
+
+    $("avs-strength").addEventListener("change", (e) => {
+      settings.priorStrength = clamp(parseInt(e.target.value, 10) || 30, 1, 500);
+      e.target.value = String(settings.priorStrength);
+      save();
+      apply();
+    });
+    $("avs-advanced").addEventListener("toggle", (e) => {
+      settings.advancedOpen = e.target.open;
+      save();
     });
 
     $("avs-collapse").addEventListener("click", () => {
@@ -674,9 +706,7 @@
     // Basis memory loads with the settings, so it is in place before the
     // first apply(): detectBasis is synchronous.
     chrome.storage.local.get(["avs", MEMORY_KEY], (res) => {
-      // priorStrength had a panel control once; a value saved then must not
-      // keep applying now that nothing on screen can change it.
-      if (res && res.avs) settings = { ...DEFAULTS, ...res.avs, priorStrength: DEFAULTS.priorStrength };
+      if (res && res.avs) settings = { ...DEFAULTS, ...res.avs };
       if (res && res[MEMORY_KEY]) basisMemory = res[MEMORY_KEY];
       start();
     });
