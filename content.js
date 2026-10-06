@@ -205,16 +205,37 @@
     return h ? h.textContent.trim() : "";
   }
 
+  // Whether the tile shows a current price at all, read or not. Struck-through
+  // and unit prices are .a-text-price, so they don't count.
+  function showsPrice(tile) {
+    return !!tile.querySelector(".a-price:not(.a-text-price), .a-price-whole");
+  }
+
   function collect(visible) {
     return tiles(visible).map((el) => ({
       el,
       title: titleOf(el),
       price: readPrice(el),
+      priceShown: showsPrice(el),
       unit: readUnitPrice(el),
       rating: readRating(el),
       reviews: readReviewCount(el),
       sponsored: isSponsored(el),
     }));
+  }
+
+  /*
+   * Why most results have no price, when they don't. "hidden": Amazon showed
+   * none, typically for items that don't deliver to the shopper's address (an
+   * amazon.co.uk search from the US shows "See options" on most results).
+   * "unreadable": a price is on the tile but the extractor couldn't read it,
+   * which points at a markup change. Null when most results are priced.
+   */
+  function missingPrices(items) {
+    const unpriced = items.filter((p) => p.price == null);
+    if (unpriced.length <= items.length / 2) return null;
+    const unreadable = unpriced.filter((p) => p.priceShown).length;
+    return unreadable > unpriced.length / 2 ? "unreadable" : "hidden";
   }
 
   /* --------------------------------------------------------- price basis */
@@ -512,20 +533,26 @@
 
     // Say which denominator was chosen. With no control over it, the user
     // needs to see the guess to know whether to trust the order.
+    const missing = missingPrices(items);
+    const hidden =
+      missing === "hidden"
+        ? " \u00b7 most results show no price here: Amazon hides prices for items that don't deliver to your address"
+        : "";
     if (basis) {
       const d = U.DIMENSIONS[basis];
       const derived = keep.filter((p) => !(p.unit && p.unit.dim === basis)).length;
       setStatus(
         `Ranking by price per ${d.label} \u00b7 ${keep.length} of ${total} results` +
-          (derived ? ` \u00b7 ${derived} estimated from titles` : "")
+          (derived ? ` \u00b7 ${derived} estimated from titles` : "") +
+          hidden,
+        hidden ? "warn" : ""
       );
+    } else if (missing === "unreadable") {
+      setStatus("Couldn't read prices for most results \u2014 Amazon may have changed its markup.", "warn");
+    } else if (missing === "hidden") {
+      setStatus(`Ranking by list price \u00b7 ${keep.length} of ${total} results` + hidden, "warn");
     } else {
-      const unpriced = items.filter((p) => p.price == null).length;
-      if (unpriced > total / 2) {
-        setStatus("Couldn't read prices for most results \u2014 Amazon may have changed its markup.", "warn");
-      } else {
-        setStatus(`Ranking by list price \u00b7 ${keep.length} of ${total} results \u00b7 no shared unit`);
-      }
+      setStatus(`Ranking by list price \u00b7 ${keep.length} of ${total} results \u00b7 no shared unit`);
     }
   }
 
@@ -718,6 +745,7 @@
   window.__avsInternals = {
     collect,
     detectBasis,
+    missingPrices,
     effectivePrice,
     score,
     setSettings: (s) => Object.assign(settings, s),

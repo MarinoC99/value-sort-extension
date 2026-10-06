@@ -8,7 +8,7 @@ global.document = { querySelector: () => null, querySelectorAll: () => [] };
 require("../units.js");
 require("../content.js");
 const U = window.AVSUnits;
-const { detectBasis, effectivePrice, score, setSettings } = window.__avsInternals;
+const { detectBasis, effectivePrice, score, setSettings, missingPrices } = window.__avsInternals;
 
 const mk = (title, price, unitTxt, rating, reviews) => ({
   el: null,
@@ -156,6 +156,17 @@ test("switching dimension needs 55% and a 15-point lead over the remembered one"
 test("outside the 30-70% band, memory is ignored", () => {
   assert.equal(detectBasis(page(20, 5, 15), "volume"), "count"); // 75%
   assert.equal(detectBasis(page(20, 5), "volume"), null); // 25%
+});
+
+test("missing prices are told apart: none shown vs. shown but unreadable", () => {
+  const tile = (price, priceShown) => ({ price, priceShown });
+  const priced = Array.from({ length: 4 }, () => tile(10, true));
+  // Most results priced: nothing to explain.
+  assert.equal(missingPrices([...priced, tile(null, false)]), null);
+  // Most unpriced, with no price on the tile ("See options"): Amazon hid them.
+  assert.equal(missingPrices([tile(10, true), ...Array.from({ length: 5 }, () => tile(null, false))]), "hidden");
+  // Most unpriced, but a price is on the tile: the extractor failed.
+  assert.equal(missingPrices([tile(10, true), ...Array.from({ length: 5 }, () => tile(null, true))]), "unreadable");
 });
 
 test.after(() => clearInterval(window.__avsPoll));

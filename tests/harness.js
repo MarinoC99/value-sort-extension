@@ -174,8 +174,9 @@ function report(file) {
       .join(", ");
 
     const title = basis ? checkTitles(priced, basis, w.AVSUnits) : null;
+    const missing = I.missingPrices(items);
 
-    return { file, n: items.length, priced: priced.length, stats, unparsed, basis, coverage, ounces, title, rows };
+    return { file, n: items.length, priced: priced.length, stats, unparsed, basis, coverage, ounces, title, missing, rows };
   } finally {
     w.clearInterval(w.__avsPoll);
     dom.window.close();
@@ -205,6 +206,7 @@ for (const file of files) {
     `  unit coverage of priced: ${r.coverage || "none"}  ->  basis: ${r.basis || "list price"}` +
       (r.ounces ? `  (${r.ounces})` : "")
   );
+  if (r.missing) console.log(`  most results unpriced: ${r.missing === "hidden" ? "no price shown on the tile (hidden by Amazon)" : "price shown but unreadable"}`);
   if (r.unparsed.length) console.log(`  unit strings not in vocabulary: ${r.unparsed.map((u) => JSON.stringify(u)).join(", ")}`);
   if (r.title) {
     const t = r.title;
