@@ -34,11 +34,11 @@ adjusted = (reviews · stars + strength · baseline) / (reviews + strength)
 ```
 
 The baseline is 4.3, roughly the Amazon-wide average — star ratings there are
-badly left-skewed, so 4.3 is unremarkable rather than good. **Trust after** is
-`strength`: the review count at which a product's own average and the baseline
-carry equal weight. At the default of 30, a 4.9 from 6 reviews adjusts to 4.40,
-exactly level with a 4.4 from 8,200. Raise it to be more skeptical of thin
-review counts; lower it toward 1 to take star averages at face value.
+badly left-skewed, so 4.3 is unremarkable rather than good. `strength` is fixed
+at 30: the review count at which a product's own average and the baseline carry
+equal weight. A 4.9 from 6 reviews adjusts to 4.40, exactly level with a 4.4
+from 8,200. It used to be a panel setting ("Trust after"), but it overlapped
+with *Min. review count* in a way that was hard to explain, so it was removed.
 
 ### Price
 
@@ -111,9 +111,8 @@ a different search.
 | --- | --- |
 | Quality / price | The weighting. This is the whole point. |
 | Re-sort results | Off restores Amazon's original order. |
-| Hide under | Dims results below a review count. Blunter than the shrinkage and useful alongside it. |
+| Min. review count | Dims and pushes down results with fewer reviews than this. 0 turns it off. Blunter than the shrinkage and useful alongside it. |
 | Hide sponsored | Dims ads. On by default. |
-| Trust after | Reviews needed before a product's average outweighs the baseline. |
 
 Hidden results are dimmed and pushed down rather than removed, so you can still
 see what was set aside.

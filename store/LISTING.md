@@ -23,7 +23,7 @@ dashboard. Upload `dist/value-sort-extension-<version>.zip` from `npm run packag
 >
 > Review quality is not the raw star average. A 4.9 from six reviews is mostly noise, so
 > ratings with few reviews are pulled toward a typical rating, and well-reviewed products
-> keep their own average. You can set how many reviews it takes to be trusted.
+> keep their own average.
 >
 > Price uses the per-unit price Amazon shows on each result ("$0.52/Count", "$0.30/Fl Oz")
 > when most results on the page share a unit, so a large pack is compared fairly with a

@@ -21,7 +21,7 @@
   const DEFAULTS = {
     weight: 0.5, // 0 = price only, 1 = quality only
     priorMean: 4.3, // what an unknown product is assumed to be worth
-    priorStrength: 30, // reviews needed to outvote that assumption
+    priorStrength: 30, // reviews needed to outvote that assumption; fixed, not user-set
     minReviews: 0,
     hideSponsored: true,
     enabled: true,
@@ -561,16 +561,12 @@
         <input type="checkbox" id="avs-enabled" />
       </div>
       <div class="avs-row">
-        <label for="avs-minrev">Hide under</label>
+        <label for="avs-minrev">Min. review count</label>
         <input type="number" id="avs-minrev" min="0" step="10" aria-label="Minimum reviews" />
       </div>
       <div class="avs-row">
         <label for="avs-sponsored">Hide sponsored</label>
         <input type="checkbox" id="avs-sponsored" />
-      </div>
-      <div class="avs-row">
-        <label for="avs-strength" title="Reviews needed before a product's own average outweighs the baseline">Trust after</label>
-        <input type="number" id="avs-strength" min="1" max="500" step="5" aria-label="Prior strength in reviews" />
       </div>
       <div class="avs-status" id="avs-status"></div>
     `;
@@ -596,7 +592,6 @@
       $("avs-enabled").checked = settings.enabled;
       $("avs-sponsored").checked = settings.hideSponsored;
       $("avs-minrev").value = String(settings.minReviews);
-      $("avs-strength").value = String(settings.priorStrength);
       paint();
     }
 
@@ -628,12 +623,6 @@
     $("avs-minrev").addEventListener("change", (e) => {
       settings.minReviews = clamp(parseInt(e.target.value, 10) || 0, 0, 1e6);
       e.target.value = String(settings.minReviews);
-      save();
-      apply();
-    });
-    $("avs-strength").addEventListener("change", (e) => {
-      settings.priorStrength = clamp(parseInt(e.target.value, 10) || 30, 1, 500);
-      e.target.value = String(settings.priorStrength);
       save();
       apply();
     });
@@ -685,7 +674,9 @@
     // Basis memory loads with the settings, so it is in place before the
     // first apply(): detectBasis is synchronous.
     chrome.storage.local.get(["avs", MEMORY_KEY], (res) => {
-      if (res && res.avs) settings = { ...DEFAULTS, ...res.avs };
+      // priorStrength had a panel control once; a value saved then must not
+      // keep applying now that nothing on screen can change it.
+      if (res && res.avs) settings = { ...DEFAULTS, ...res.avs, priorStrength: DEFAULTS.priorStrength };
       if (res && res[MEMORY_KEY]) basisMemory = res[MEMORY_KEY];
       start();
     });
