@@ -213,6 +213,18 @@
   text-align: right;
 }
 
+/* no up/down spinner arrows on the number fields; typing and arrow keys still work */
+.avs-row input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.avs-row input[type="number"]::-webkit-outer-spin-button,
+.avs-row input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .avs-row input[type="number"]:focus-visible,
 .avs-row input[type="checkbox"]:focus-visible {
   outline: 2px solid var(--avs-quality);
