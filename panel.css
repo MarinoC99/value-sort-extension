@@ -152,13 +152,13 @@
 .avs-slider::-webkit-slider-runnable-track {
   height: 6px;
   border-radius: 3px;
-  background: linear-gradient(90deg, var(--avs-price), var(--avs-quality));
+  background: linear-gradient(90deg, var(--avs-quality), var(--avs-price));
 }
 
 .avs-slider::-moz-range-track {
   height: 6px;
   border-radius: 3px;
-  background: linear-gradient(90deg, var(--avs-price), var(--avs-quality));
+  background: linear-gradient(90deg, var(--avs-quality), var(--avs-price));
 }
 
 .avs-slider::-webkit-slider-thumb {

@@ -583,7 +583,7 @@
       </div>
       <div class="avs-ratio-legend"><span>quality</span><span>price</span></div>
       <input class="avs-slider" id="avs-weight" type="range" min="0" max="100" step="1"
-             aria-label="Quality against price" />
+             aria-label="Weighting: left for quality, right for price" />
       <div class="avs-row">
         <label for="avs-enabled">Re-sort results</label>
         <input type="checkbox" id="avs-enabled" />
@@ -634,7 +634,9 @@
     }
 
     function sync() {
-      weight.value = String(Math.round(settings.weight * 100));
+      // The slider runs quality (left) to price (right), matching the labels
+      // above it, so its value is the price share.
+      weight.value = String(Math.round((1 - settings.weight) * 100));
       $("avs-enabled").checked = settings.enabled;
       $("avs-sponsored").checked = settings.hideSponsored;
       $("avs-minrev").value = String(settings.minReviews);
@@ -652,7 +654,7 @@
     }
 
     weight.addEventListener("input", () => {
-      settings.weight = clamp(Number(weight.value) / 100, 0, 1);
+      settings.weight = clamp(1 - Number(weight.value) / 100, 0, 1);
       paint();
       applySoon();
     });
